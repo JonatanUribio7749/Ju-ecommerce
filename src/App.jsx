@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import ItemListContainer from "./components/ItemListContainer";
@@ -12,11 +11,26 @@ const App = () => {
       <Router>
         <NavBar />
         <Routes>
-          <Route path="/" element={<ItemListContainer greeting="Bienvenido a nuestra tienda moderna" />} />
-          <Route path="/category/:categoryId" element={<ItemListContainer />} />
-          <Route path="/item/:itemId" element={<ItemDetailContainer />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="*" element={<h2>404 - Página no encontrada</h2>} />
+          <Route 
+            path="/" 
+            element={<ItemListContainer greeting="Bienvenido a nuestra tienda moderna" />} 
+          />
+          <Route 
+            path="/category/:categoryId" 
+            element={<ItemListContainer key={window.location.pathname} />} 
+          />
+          <Route 
+            path="/item/:itemId" 
+            element={<ItemDetailContainer />} 
+          />
+          <Route 
+            path="/cart" 
+            element={<Cart />} 
+          />
+          <Route 
+            path="*" 
+            element={<h2>404 - Página no encontrada</h2>} 
+          />
         </Routes>
       </Router>
     </CartProvider>
@@ -24,3 +38,4 @@ const App = () => {
 };
 
 export default App;
+

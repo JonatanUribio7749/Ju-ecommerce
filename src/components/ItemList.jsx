@@ -1,23 +1,28 @@
-// src/components/ItemList.jsx
 import React from "react";
-import { useCart } from "../context/CartContext";
+import ItemCard from "./ItemCard";
+import "../styles/itemList.css";
 
 const ItemList = ({ items }) => {
-    const { addToCart } = useCart();
+  if (!Array.isArray(items) || items.length === 0) {
+    return <h2>No hay productos disponibles</h2>;
+  }
 
-    return (
-        <div className="item-list">
-            {items.map((item) => (
-                <div key={item.id} className="item-card">
-                    <h3>{item.name}</h3>
-                    <p className="item-price">Precio: <strong>${item.price}</strong></p>
-                    <button className="add-to-cart-btn" onClick={() => addToCart(item)}>
-                        Agregar al carrito
-                    </button>
-                </div>
-            ))}
-        </div>
-    );
+  // Solo mostrar 6 productos por sección
+  const productosAMostrar = items.slice(0, 6);
+
+  return (
+    <div className="item-list">
+      {productosAMostrar.map((item) => (
+        <ItemCard key={item.id} item={item} />
+      ))}
+    </div>
+  );
 };
 
 export default ItemList;
+
+
+
+
+
+

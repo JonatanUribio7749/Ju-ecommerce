@@ -1,48 +1,113 @@
-// src/components/Cart.jsx
-import React from "react";
+import { createOrder } from "../services/createOrder";
 import { useCart } from "../context/CartContext";
+import { useState, useEffect } from "react";
+import "../styles/cart.css"; // ✅ Importando estilos correctamente
 
 const Cart = () => {
-    const { cart, removeFromCart, clearCart, totalItems } = useCart();
+  const { cart, removeFromCart, clearCart, totalPrice } = useCart();
+  const [orderId, setOrderId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    const calculateTotal = () => {
-        return cart.reduce((total, item) => total + item.price * item.quantity, 0);
-    };
+  // Estado para los datos del comprador
+  const [buyer, setBuyer] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
 
-    return (
-        <div className="cart-page">
-            <h2>Carrito ({totalItems} productos)</h2>
-            {cart.length === 0 ? (
-                <p className="cart-empty">Tu carrito está vacío.</p>
-            ) : (
-                <div className="cart-summary">
-                    {cart.map((item) => (
-                        <div key={item.id} className="cart-item">
-                            <p className="cart-item-details">
-                                {item.name} - ${item.price} x {item.quantity}
-                            </p>
-                            <button className="remove-btn" onClick={() => removeFromCart(item.id)}>
-                                Eliminar
-                            </button>
-                        </div>
-                    ))}
-                    <div className="cart-total">
-                        <p>
-                            <strong>Total: ${calculateTotal()}</strong>
-                        </p>
-                        <div className="cart-actions">
-                            <button className="clear-cart-btn" onClick={clearCart}>
-                                Vaciar carrito
-                            </button>
-                            <button className="checkout-btn">
-                                Finalizar compra
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
+  useEffect(() => {
+    if (cart.length === 0) {
+      setOrderId(null);
+    }
+  }, [cart]);
+
+  const handleCheckout = async () => {
+    if (cart.length === 0) {
+      alert("El carrito está vacío");
+      return;
+    }
+
+    if (!buyer.name || !buyer.email || !buyer.phone) {
+      alert("Por favor, completa todos los campos antes de finalizar la compra.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const id = await createOrder(cart, totalPrice(), buyer);
+      setOrderId(id);
+      clearCart();
+    } catch (error) {
+      console.error("Error al procesar la compra:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="cart-container">
+      <h2>🛒 Carrito ({cart.length} productos)</h2>
+
+      {cart.length === 0 ? (
+        <p className="empty-cart">Tu carrito está vacío</p>
+      ) : (
+        <>
+          {cart.map((item) => (
+            <div key={item.id} className="cart-item">
+              <h3>{item.nombre}</h3>
+              <p>Precio: <strong>${item.precio}</strong></p>
+              <p>Cantidad: <strong>{item.quantity}</strong></p> {/* ✅ Mostrar cantidad correctamente */}
+              <button onClick={() => removeFromCart(item.id)} className="remove-btn">❌ Eliminar</button>
+            </div>
+          ))}
+
+          <h3 className="cart-total">Total: <strong>${totalPrice()}</strong></h3>
+
+          {/* Formulario de datos del comprador (ahora más compacto) */}
+          <div className="buyer-form">
+            <h3>🔹 Datos del comprador</h3>
+            <input
+              type="text"
+              placeholder="Nombre"
+              value={buyer.name}
+              onChange={(e) => setBuyer({ ...buyer, name: e.target.value })}
+            />
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              value={buyer.email}
+              onChange={(e) => setBuyer({ ...buyer, email: e.target.value })}
+            />
+            <input
+              type="tel"
+              placeholder="Teléfono"
+              value={buyer.phone}
+              onChange={(e) => setBuyer({ ...buyer, phone: e.target.value })}
+            />
+          </div>
+
+          {orderId ? (
+            <p className="order-success">
+              🎉 ¡Compra realizada! Número de orden: <strong>{orderId}</strong>
+            </p>
+          ) : (
+            <>
+              <button onClick={handleCheckout} className="checkout-btn" disabled={loading}>
+                {loading ? "Procesando..." : "Finalizar compra"}
+              </button>
+              <button onClick={clearCart} className="clear-btn">🗑️ Vaciar carrito</button>
+            </>
+          )}
+        </>
+      )}
+    </div>
+  );
 };
 
 export default Cart;
+
+
+
+
+

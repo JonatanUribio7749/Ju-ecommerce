@@ -3,6 +3,7 @@ import React, { createContext, useState, useContext } from "react";
 
 const CartContext = createContext();
 
+// Hook personalizado para usar el contexto
 export const useCart = () => {
     return useContext(CartContext);
 };
@@ -10,6 +11,7 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
 
+    // Agregar producto al carrito
     const addToCart = (item) => {
         const existingItem = cart.find((cartItem) => cartItem.id === item.id);
         if (existingItem) {
@@ -23,16 +25,26 @@ export const CartProvider = ({ children }) => {
         }
     };
 
+    // Remover producto del carrito
     const removeFromCart = (id) => {
         const updatedCart = cart.filter((cartItem) => cartItem.id !== id);
         setCart(updatedCart);
     };
 
+    // Vaciar carrito
     const clearCart = () => {
         setCart([]);
     };
 
-    const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+    // Calcular total de ítems en el carrito
+    const totalItems = () => {
+        return cart.reduce((acc, item) => acc + item.quantity, 0);
+    };
+
+    // Calcular el precio total del carrito
+    const totalPrice = () => {
+        return cart.reduce((acc, item) => acc + item.precio * item.quantity, 0);
+    };
 
     return (
         <CartContext.Provider
@@ -42,10 +54,10 @@ export const CartProvider = ({ children }) => {
                 removeFromCart,
                 clearCart,
                 totalItems,
+                totalPrice, // ✅ Ahora esta función está disponible en el contexto
             }}
         >
             {children}
         </CartContext.Provider>
     );
 };
-

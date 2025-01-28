@@ -1,33 +1,79 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 import ItemList from "./ItemList";
-import "./itemList.css";
 
-const ItemListContainer = ({ greeting }) => {
-  const [items, setItems] = useState([]);
+const ItemListContainer = () => {
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { categoryId } = useParams();
 
   useEffect(() => {
-    const mockItems = [
-      { id: 1, name: "Laptop", price: 1500, category: "electronica" },
-      { id: 2, name: "Camiseta", price: 30, category: "ropa" },
-      { id: 3, name: "Auriculares", price: 200, category: "electronica" },
-      { id: 4, name: "Bolso", price: 50, category: "accesorios" },
-    ];
+    const fetchProductos = async () => {
+      try {
+        console.log("⚡ Obteniendo productos de Firebase...");
+        const querySnapshot = await getDocs(collection(db, "productos"));
+        let productosFirebase = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
-    if (categoryId) {
-      setItems(mockItems.filter((item) => item.category === categoryId));
-    } else {
-      setItems(mockItems);
-    }
+        console.log("✅ Productos obtenidos desde Firebase:", productosFirebase);
+        console.log("🔍 Categoría actual en la URL:", categoryId);
+
+        if (!categoryId) {
+          console.error("❌ ERROR: `categoryId` es undefined. React Router no está obteniendo la URL correctamente.");
+          setProductos(productosFirebase);
+          return;
+        }
+
+        // 🔹 Normalización de datos para evitar errores de comparación
+        const categoriaURL = categoryId.trim().toLowerCase();
+        const productosFiltrados = productosFirebase.filter(
+          (producto) => producto.categoria?.trim().toLowerCase() === categoriaURL
+        );
+
+        console.log("📌 Productos después del filtrado:", productosFiltrados);
+        setProductos(productosFiltrados);
+      } catch (error) {
+        console.error("❌ Error al obtener productos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductos();
   }, [categoryId]);
 
   return (
-    <main className="item-list-container">
-      <h2 className="greeting">{greeting}</h2>
-      <ItemList items={items} />
-    </main>
+    <div style={{ padding: "20px" }}>
+      {loading ? (
+        <p>Cargando productos...</p>
+      ) : productos.length > 0 ? (
+        <ItemList items={productos} />
+      ) : (
+        <p>No hay productos disponibles</p>
+      )}
+    </div>
   );
 };
 
 export default ItemListContainer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
