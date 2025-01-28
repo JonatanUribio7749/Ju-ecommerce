@@ -76,11 +76,11 @@ npm run dev
 
 ✅ Cumple con todas las consignas del proyecto:
 
-Listado de productos con Firestore 🔥
+Listado de productos con Firestore ✅
 
 Carrito funcional con React Context ✅
 
-Finalización de compra en Firestore 📄
+Finalización de compra en Firestore ✅
 
-Diseño responsive y buena UX/UI 🎨
+Diseño responsive y buena UX/UI ✅
 
