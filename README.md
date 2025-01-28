@@ -59,12 +59,15 @@ Este proyecto es una Single Page Application (SPA) de E-commerce desarrollada en
  🔧 Instalación y Configuración
 
  1️⃣ Clonar el repositorio
+
 git clone https://github.com/JonatanUribio7749/Ju-ecommerce.git
 
 2️⃣ Instalar dependencias
+
 npm install
 
 3️⃣ Configurar Firebase
+
 Crear un archivo .env con las credenciales de Firebase:
 
 VITE_FIREBASE_API_KEY=your-api-key
