@@ -1,4 +1,3 @@
-// src/context/CartContext.jsx
 import React, { createContext, useState, useContext } from "react";
 
 const CartContext = createContext();
@@ -40,11 +39,10 @@ export const CartProvider = ({ children }) => {
     const totalItems = () => {
         return cart.reduce((acc, item) => acc + item.quantity, 0);
     };
+    
 
     // Calcular el precio total del carrito
-    const totalPrice = () => {
-        return cart.reduce((acc, item) => acc + item.precio * item.quantity, 0);
-    };
+    const totalPrice = cart.reduce((acc, item) => acc + item.precio * item.quantity, 0); // ✅ Como variable
 
     return (
         <CartContext.Provider
@@ -54,10 +52,11 @@ export const CartProvider = ({ children }) => {
                 removeFromCart,
                 clearCart,
                 totalItems,
-                totalPrice, // ✅ Ahora esta función está disponible en el contexto
+                totalPrice, // ✅ Se mantiene como variable
             }}
         >
             {children}
         </CartContext.Provider>
     );
 };
+

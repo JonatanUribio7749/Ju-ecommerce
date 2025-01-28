@@ -5,7 +5,7 @@ import "./NavBar.css";
 import logo from "../assets/electro-logo.png";
 
 const NavBar = () => {
-  const { cart } = useCart();
+  const { totalItems } = useCart(); // ✅ Ahora usamos totalItems()
 
   return (
     <nav className="navbar">
@@ -28,7 +28,7 @@ const NavBar = () => {
           Accesorios
         </NavLink>
         <NavLink to="/cart" className="nav-button" activeclassname="active">
-          Carrito 🛒 ({cart.length})
+          Carrito 🛒 ({totalItems()}) {/* ✅ Usamos totalItems() */}
         </NavLink>
       </div>
     </nav>
@@ -36,4 +36,6 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
+
 

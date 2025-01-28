@@ -35,7 +35,7 @@ const Cart = () => {
     setLoading(true);
 
     try {
-      const id = await createOrder(cart, totalPrice(), buyer);
+      const id = await createOrder(cart, totalPrice, buyer); // ✅ totalPrice sin paréntesis
       setOrderId(id);
       clearCart();
     } catch (error) {
@@ -57,14 +57,14 @@ const Cart = () => {
             <div key={item.id} className="cart-item">
               <h3>{item.nombre}</h3>
               <p>Precio: <strong>${item.precio}</strong></p>
-              <p>Cantidad: <strong>{item.quantity}</strong></p> {/* ✅ Mostrar cantidad correctamente */}
+              <p>Cantidad: <strong>{item.quantity}</strong></p>
               <button onClick={() => removeFromCart(item.id)} className="remove-btn">❌ Eliminar</button>
             </div>
           ))}
 
-          <h3 className="cart-total">Total: <strong>${totalPrice()}</strong></h3>
+          <h3 className="cart-total">Total: <strong>${totalPrice}</strong></h3> {/* ✅ totalPrice sin () */}
 
-          {/* Formulario de datos del comprador (ahora más compacto) */}
+          {/* Formulario de datos del comprador */}
           <div className="buyer-form">
             <h3>🔹 Datos del comprador</h3>
             <input
@@ -106,6 +106,8 @@ const Cart = () => {
 };
 
 export default Cart;
+
+
 
 
 
