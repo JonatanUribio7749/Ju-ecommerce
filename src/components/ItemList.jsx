@@ -1,5 +1,5 @@
 import React from "react";
-import ItemCard from "./ItemCard";
+import ItemCard from "./ItemCard.jsx";
 import "../styles/itemList.css";
 
 const ItemList = ({ items }) => {

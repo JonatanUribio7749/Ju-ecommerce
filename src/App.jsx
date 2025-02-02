@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import NavBar from "./components/NavBar";
-import ItemListContainer from "./components/ItemListContainer";
-import ItemDetailContainer from "./components/ItemDetailContainer";
-import Cart from "./components/Cart";
-import { CartProvider } from "./context/CartContext";
+import NavBar from "./components/NavBar.jsx";
+import ItemListContainer from "./components/ItemListContainer.jsx";
+import ItemDetailContainer from "./components/ItemDetailContainer.jsx";
+import Cart from "./components/Cart.jsx";
+import { CartProvider } from "./context/CartContext.jsx";
+
 
 const App = () => {
   return (

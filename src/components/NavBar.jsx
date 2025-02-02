@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../context/CartContext.jsx";
 import "./NavBar.css";
 import logo from "../assets/electro-logo.png";
 

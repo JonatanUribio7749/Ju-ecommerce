@@ -1,5 +1,5 @@
-import { createOrder } from "../services/createOrder";
-import { useCart } from "../context/CartContext";
+import { createOrder } from "../services/createOrder.js";
+import { useCart } from "../context/CartContext.jsx";
 import { useState, useEffect } from "react";
 import "../styles/cart.css"; // ✅ Importando estilos correctamente
 
